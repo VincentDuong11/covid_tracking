@@ -1,0 +1,208 @@
+{% extends 'csvapp/base.html'%} {% block content%}
+<!-- pruid, prname, prnameFR, date, numconf, numprob, numdeaths, numtotal, numtoday, ratetotal -->
+
+
+
+  <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="file1"> Upload a file</label>
+    </br>
+    <input type="file" id="file1" name="file" />
+    
+
+    <small id="small">Only accepts CSV files</small>
+    <button type="submit">Upload</button>
+
+  </form> 
+
+
+{% comment %} <div> {% endcomment %}
+  {% comment %} <form>
+    <div  action="/csvapp/list" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <label for="file1"> Upload a file</label>
+      <input type="file" class="form-control-file" id="file1" require>
+      <small>Only accepts CSV files</small>
+      <button type="submit">Submit</button>
+
+      
+    </div>
+  </form> {% endcomment %}
+
+
+
+ {% if messages %} {% for message in messages %}   
+
+    <div class="{{ message.tags }}">
+      <strong>{{message|safe}}</strong>
+    </div>
+
+  {% endfor %} {% else %} {{order}} {% endif %}
+
+<br />
+
+<form
+  action="{% url 'record_download' %}"
+  
+>
+  <input type="submit" value="Export CSV" />
+</form>
+<br />
+
+{% comment %} <form
+  action="{% url 'record_insert' %}"
+  class="btn btn-info btn-lg"
+  style="display: inline; padding-left: 20px"
+>
+  <input type="submit" value="Add new record" />
+</form>
+<br />
+<br />
+
+<form
+  action="{% url 'record_sortId_ascending' %}"
+  method="POST"
+  class="btn btn-info btn-lg"
+  style="display: inline; padding-left: 20px"
+>
+  {% csrf_token %}
+  <input type="submit" value="Sort record by pruid ascending" />
+</form>
+
+<form
+  action="{% url 'record_sortId_descending' %}"
+  method="POST"
+  class="btn btn-info btn-lg"
+  style="display: inline; padding-left: 20px"
+>
+  {% csrf_token %}
+  <input type="submit" value="Sort record by pruid descending" />
+</form>
+
+<br />
+<br />
+
+<form
+  action="{% url 'record_sortName_ascending' %}"
+  method="POST"
+  class="btn btn-info btn-lg"
+  style="display: inline; padding-left: 20px"
+>
+  {% csrf_token %}
+  <input type="submit" value="Sort record by prname A-Z" />
+</form>
+
+<form
+  action="{% url 'record_sortName_descending' %}"
+  method="POST"
+  class="btn btn-info btn-lg"
+  style="display: inline; padding-left: 20px"
+>
+  {% csrf_token %}
+  <input type="submit" value="Sort record by prname Z-A" />
+</form>
+
+<br />
+<br /> {% endcomment %}
+
+
+
+  <h3>List records</h3>
+  
+  <a href="{% url 'record_insert' %}" class="btn btn-primary">Add New Record</a> 
+    </br> </br>
+  <a href="{% url 'bar_chart' %}" class="btn btn-primary">Open bar chart</a>
+    </br> </br>
+  <a href="{% url 'horizontal_bar_chart' %}" class="btn btn-primary">Open horizontal bar chart</a>
+    </br> </br>
+
+{% comment %} <div class="dropdown ">
+  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Sort <span class="glyphicon glyphicon-filter"></span
+              >
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="{% url 'record_sortId_ascending' %}" class="dropdown-item">Sort record by pruid ascending</a></li>
+       <li role="separator" class="divider"></li>
+    <li><a href="{% url 'record_sortId_descending' %}" class="dropdown-item">Sort record by pruid descending</a></li>
+       <li role="separator" class="divider"></li>
+    <li><a href="{% url 'record_sortName_ascending' %}" class="dropdown-item">Sort record by prname A-Z</a></li>
+       <li role="separator" class="divider"></li>
+    <li><a href="{% url 'record_sortName_descending' %}" class="dropdown-item">Sort record by prname Z-A</a></li>
+  </ul>
+</div> {% endcomment %}
+
+
+  </br> 
+ 
+      {% comment %} """[Author: Chanh Duong. Student number: 040-681-356]
+    """ {% endcomment %}
+  <div class="table-responsive-sm">
+  </br>
+    <table
+      id="bootstrapdatatable"
+      class="table table-striped table-bordered"
+      width="100%"
+    >
+      <thead>
+        <th>pruid</th>
+        <th>prname</th>
+        <th>prnameFR</th>
+        <th>date</th>
+        <th>numconf</th>
+        <th>numprob</th>
+        <th>numdeaths</th>
+        <th>numtotal</th>
+        <th>numtoday</th>
+        <th>ratetotal</th>
+        <th>Edit</th>
+
+        <th>
+          <a
+            href="{% url 'record_delete_all' %}"
+            class="btn btn-sm btn-danger"
+          >Delete All</a>
+        </th>
+      </thead>
+      <tbody>
+        {% for record in records %}
+        <tr>
+          <td>{{record.pruid}}</td>
+          <td>{{record.prname}}</td>
+          <td>{{record.prnameFR}}</td>
+          <td>{{record.date|date:'Y-m-d'}}</td>
+          <td>{{record.numconf}}</td>
+          <td>{{record.numprob}}</td>
+          <td>{{record.numdeaths}}</td>
+          <td>{{record.numtotal}}</td>
+          <td>{{record.numtoday}}</td>
+          <td>{{record.ratetotal}}</td>
+          <td>
+            <p data-placement="top"  title="Edit">
+              <a
+                href="{% url 'record_update' record.id %}"
+                class="btn btn-primary btn-xs"
+                ><span class="glyphicon glyphicon-pencil"></span>
+              </a>
+            </p>
+          </td>
+
+          <td>
+            <p data-placement="top"  title="Delete">
+              <a
+                href="{% url 'record_delete' record.id %}"
+                class="btn btn-danger btn-xs"
+                ><span class="glyphicon glyphicon-trash"></span
+              ></a>
+            </p>
+          </td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+{% endblock content %}

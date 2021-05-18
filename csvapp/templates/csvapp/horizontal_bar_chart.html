@@ -1,0 +1,78 @@
+
+{% extends 'csvapp/base.html'%} {% block content%}
+
+
+<div class = "col-md-12">
+    <canvas id="myChart" width="400" height="300"></canvas>
+
+        <script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    
+    var myChart = new Chart(ctx, {
+        type: 'horizontalBar',
+        data: {
+            labels: [{% for record in records %} '{{record.date}}', {% endfor %}],
+            datasets: [
+            {
+                label: 'total number of case in Canada',
+                data: [{% for record in records %} '{{record.numtotal}}',  {% endfor %} ],
+                backgroundColor: 
+              'grey'
+                ,
+                borderColor: 
+              'grey'
+                ,
+                borderWidth: 1
+            },
+            {
+                label: 'number of death case in Canada',
+                data: [{% for record in records %} '{{record.numdeaths}}',  {% endfor %} ],
+                backgroundColor: 
+              'red'
+                ,
+                borderColor: 
+              'red'
+                ,
+                borderWidth: 1
+            } 
+
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Bar Chart',
+                fontSize: 25,
+                fontColor: 'black'
+                },
+
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date',
+                        fontColor: 'black',
+                        position: 'top'
+                        },
+                    ticks: {
+                        beginAtZero: true,                      
+                        }
+                    }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Cases (Number)',
+                        fontColor: 'black'
+                        }
+                    }]
+                }
+            }
+
+        
+    });
+    </script>
+
+</div>
+
+
+{% endblock content %}

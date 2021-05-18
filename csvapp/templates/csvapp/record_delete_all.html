@@ -1,0 +1,21 @@
+{% extends 'csvapp/base.html'%} {% block content%}
+
+  <form method="POST" class="post-form" action="">
+    {% csrf_token %}
+
+    <h2>Are you sure you want to delete all data?</h2>
+
+    <br />
+        <div class="col-md-2">
+      <button type="submit" class="btn btn-lg btn-danger">Delete All</button>
+    </div>
+    <div class="col-md-2">
+      <a href="/csvapp/list" class="btn btn-lg btn-primary">Cancel</a>
+    </div>
+ 
+  </form>
+
+
+
+
+{% endblock content %}
